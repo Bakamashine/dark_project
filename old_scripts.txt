@@ -1,0 +1,5 @@
+  // "dev": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    // "build": "vite build",
+    // "start": "electron .",
+    // "package": "vite build && electron-packager . dark_project --platform=win32 --arch=x64 --out=release --overwrite --asar --prune=true",
+    // "make": "node scripts/package.js"
