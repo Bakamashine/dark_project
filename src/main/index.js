@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require('electron')
-const path = require('path')
+const { join } = require('path')
 
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = !app.isPackaged
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -9,10 +9,10 @@ function createWindow() {
     height: 600,
   })
 
-  if (isDev) {
-    win.loadURL('http://localhost:5173')
+  if (isDev && process.env['ELECTRON_RENDERER_URL']) {
+    win.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    win.loadFile(path.join(__dirname, 'dist', 'index.html'))
+    win.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
 
