@@ -30,15 +30,6 @@ function createWindow() {
   fs.mkdirSync(project_dir, { recursive: true });
 }
 
-ipcMain.on("saveText", (e, value) => {
-  // fs.writeFile("projects", value.toString(), err => {
-  //   if (!err) {
-  //     console.log("file written")
-  //   }
-  //   else console.log(err)
-  // });
-});
-
 ipcMain.handle("getProjects", async () => {
   const dirs = await fs.promises.readdir(project_dir);
   console.log("Get all projects: ", dirs);

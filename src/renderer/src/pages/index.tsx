@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Container,
@@ -17,13 +17,13 @@ import { timeout_alert } from "@renderer/constants/timeout";
 function MainPage() {
   const [projects, setProjects] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [project_name, setProjectName] = useState("");
+  const [projectName, setProjectName] = useState("");
   const [show, setShow] = useState(false);
-  const [showSuccessAlert, setSuccessAlert] = useState(false);
-  const [showBadAlert, setBadAlert] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [badAlert, setBadAlert] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
 
-  const _getProjects = async () => {
+  const loadProjects = async () => {
     try {
       const projects = await window.Projects.getProjects();
       if (projects) {
@@ -34,19 +34,17 @@ function MainPage() {
     }
   };
 
-  const _createProject = async (e: ChangeEvent<HTMLFormElement>) => {
+  const handleCreateProject = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!project_name) {
-      setBadAlert(true)
+    if (!projectName) {
+      setBadAlert(true);
       return;
     }
-    console.log("project_name: ", project_name);
-    const new_dir = await window.Projects.createProject(project_name);
-    console.log("new_dir: ", new_dir);
-    if (new_dir) {
+    const newDir = await window.Projects.createProject(projectName);
+    if (newDir) {
       setSuccessAlert(true);
-      setNewProjectName(new_dir);
-      _getProjects();
+      setNewProjectName(newDir);
+      loadProjects();
     } else {
       setBadAlert(true);
     }
@@ -54,43 +52,39 @@ function MainPage() {
   };
 
   useEffect(() => {
-    _getProjects();
+    loadProjects();
   }, []);
 
-
   useEffect(() => {
-    setTimeout(() => {
-      setBadAlert(false)
-    }, timeout_alert)
-  }, [showBadAlert])
+    if (!successAlert && !badAlert) return;
+    const timer = setTimeout(() => {
+      setSuccessAlert(false);
+      setBadAlert(false);
+    }, timeout_alert);
+    return () => clearTimeout(timer);
+  }, [successAlert, badAlert]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setSuccessAlert(false)
-    }, timeout_alert)
-  }, [showSuccessAlert])
   return (
     <>
-      <Alert variant="success" show={showSuccessAlert}>
+      <Alert variant="success" show={successAlert}>
         Проект был успешно создан! Имя нового проекта: {newProjectName}
       </Alert>
-      <Alert variant="danger" show={showBadAlert}>
+      <Alert variant="danger" show={badAlert}>
         Проект существует, либо поле было пустое, либо произошла ошибка
       </Alert>
       <ModalWindow
         show={show}
-        handle_close={() => setShow(false)}
-        submit_button_hidden={true}
+        onClose={() => setShow(false)}
+        hideSubmitButton={true}
       >
-        <Form onSubmit={_createProject}>
+        <Form onSubmit={handleCreateProject}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Ваше название проекта</Form.Label>
             <Form.Control
               type="text"
               placeholder="Название проекта..."
-              // autoFocus
               onChange={(e) => setProjectName(e.target.value)}
-              value={project_name}
+              value={projectName}
             />
             <Button type="submit" variant="primary">
               Сохранить

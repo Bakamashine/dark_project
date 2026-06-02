@@ -1,46 +1,32 @@
-import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
 export interface ModalWindowProps {
-  handle_submit?: () => void;
-  handle_show?: () => void;
-  handle_hide?: () => void;
-  handle_close?: () => void;
-  submit_text?: string;
-  title_text?: string;
-
-  submit_button_text?: string;
-  cancel_button_text?: string;
+  onSubmit?: () => void;
+  onHide?: () => void;
+  onClose?: () => void;
+  title?: string;
+  submitLabel?: string;
+  cancelLabel?: string;
   show: boolean;
-  submit_button_hidden?: boolean;
-
+  hideSubmitButton?: boolean;
   children: React.ReactElement;
 }
 
 function ModalWindow(props: ModalWindowProps) {
-  //   const [show, setShow] = useState(false);
-
-  //   const handleClose = () => setShow(false);
-  //   const handleShow = () => setShow(true);
-
   return (
-    <Modal show={props.show} onHide={props.handle_close}>
+    <Modal show={props.show} onHide={props.onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>
-          {" "}
-          {props.title_text || "Стандартный заголовок"}
-        </Modal.Title>
+        <Modal.Title>{props.title || "Стандартный заголовок"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>{props.children}</Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={props.handle_close}>
-          {props.cancel_button_text || "Отменить"}
+        <Button variant="secondary" onClick={props.onClose}>
+          {props.cancelLabel || "Отменить"}
         </Button>
-        {!props.submit_button_hidden && (
-          <Button variant="primary" onClick={props.handle_submit}>
-            {props.submit_button_text || "Создать"}
+        {!props.hideSubmitButton && (
+          <Button variant="primary" onClick={props.onSubmit}>
+            {props.submitLabel || "Создать"}
           </Button>
         )}
       </Modal.Footer>
