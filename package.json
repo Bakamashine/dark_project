@@ -9,7 +9,21 @@
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",
-    "start": "electron-vite preview"
+    "start": "electron-vite preview",
+    "pack": "electron-vite build && electron-builder"
+  },
+  "build": {
+    "appId": "com.bakamashine.dark-project",
+    "productName": "Dark Project",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "out/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    }
   },
   "dependencies": {
     "bootstrap": "^5.3.8",
@@ -23,6 +37,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "electron": "^39.8.10",
+    "electron-builder": "^26.8.1",
     "electron-vite": "^5.0.0",
     "typescript": "^6.0.3",
     "vite": "^7.2.6"
