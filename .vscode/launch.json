@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Main Process",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "electron-vite",
+        "dev",
+        "--",
+        "--inspect=9229"
+      ],
+      "autoAttachChildProcesses": true,
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/out/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
+      ],
+      "env": {
+        "ELECTRON_DEV_DEBUG": "true"
+      }
+    },
+    {
+      "name": "Attach to Main Process",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "cwd": "${workspaceFolder}",
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/out/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
+      ],
+      "restart": true,
+      "timeout": 10000
+    }
+  ]
+}

@@ -38,15 +38,49 @@ ipcMain.handle("getProjects", async () => {
 
 ipcMain.handle("createProject", async (event, project_name: string) => {
   try {
-    const _path = `${project_dir}/${project_name}`
+    const _path = `${project_dir}/${project_name}`;
     await fs.promises.mkdir(_path);
-    await fs.promises.access(_path)
+    await fs.promises.access(_path);
     return project_name;
   } catch (err) {
     console.log(err);
     return null;
   }
 });
+
+ipcMain.handle(
+  "getResource",
+  async (event, path: string, file_name: string = "index.html") => {
+    try {
+      const res = await fs.promises.readFile(
+        `${project_dir}/${path}/${file_name}`,
+        "utf-8",
+      );
+      console.log("getResource: ", res);
+      return res;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  },
+);
+
+ipcMain.handle(
+  "save",
+  async (event, path: string, new_content: string, file_name: string) => {
+    try {
+      await fs.promises.writeFile(
+        `${project_dir}/${path}/${file_name}`,
+        new_content,
+      );
+      console.log("file successfully updated!")
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  },
+);
 
 app.whenReady().then(createWindow);
 

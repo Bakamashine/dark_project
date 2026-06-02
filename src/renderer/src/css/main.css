@@ -13,16 +13,16 @@ body {
   margin-top: 20px;
   margin-bottom: 20px;
   padding: 20px;
-  width: 60%;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  /* margin-left: auto; */
+  /* margin-right: auto; */
   box-shadow: 5px 5px 5px 5px;
   height: 1000px;
 }
 
-.page.first {
+/* .page.first {
   margin-top: 200px !important;
-}
+} */
 
 .border {
     border: 1px solid black;
@@ -123,7 +123,7 @@ body {
     font-size: 20px;
 }
 
-@media print {
+/* @media print {
   body {
     background-color: white;
     height: auto;
@@ -143,4 +143,5 @@ body {
     page-break-after: auto;
     break-after: auto;
   }
-}
+} */
+
