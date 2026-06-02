@@ -17,4 +17,7 @@ contextBridge.exposeInMainWorld("Files", {
 
   save: (path: string, new_content: string, file_name: string = 'index.html') => 
     ipcRenderer.invoke("save", path, new_content, file_name),
+
+  getResourceArray: (path: string, file_name: string = 'index.html') => 
+    ipcRenderer.invoke("getResourceArray", path, file_name)
 })

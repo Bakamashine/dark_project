@@ -18,6 +18,7 @@
 
 .title-one {
   text-align: center;
+  font-weight: bold;
 }
 
 .stamp {
@@ -105,4 +106,8 @@
 
 .box {
   width: 40%
+}
+
+.preview {
+  font-family: "Times New Roman", Times, serif;
 }

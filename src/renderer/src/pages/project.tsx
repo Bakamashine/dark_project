@@ -3,14 +3,36 @@ import { useCallback, useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useNavigate, useParams } from "react-router-dom";
 import "../css/project.css";
+import Loader from "@renderer/components/Loader";
+import { getCommentParam } from "@renderer/helper/regex";
+import { startPageKey } from "@renderer/constants/key";
 
 export default function Project() {
   const [text, setText] = useState("");
+  const [oldText, setOldText] = useState("")
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
   const { project } = useParams<{ project: string }>();
+  const [startPageNumber, setStartPageNumber] = useState(1);
+  const [saveStatus, setSaveStatus] = useState(false)
   const navigation = useNavigate();
+
+  const readVariables = async () => {
+    if (project) {
+      const str_array = await window.Files.getResourceArray(project);
+      for (let i of str_array) {
+        setStartPageNumber(
+          parseInt(getCommentParam(i, startPageKey) || "1", 10),
+        );
+      }
+
+      console.log("start_page: ", startPageNumber);
+    }
+  };
 
   const loadContent = useCallback(async () => {
     if (!project) return;
@@ -18,13 +40,12 @@ export default function Project() {
     const result = await window.Files.getResource(project);
     if (result) {
       setText(result);
+      setOldText(result)
     }
     setLoading(false);
   }, [project]);
 
-  useEffect(() => {
-    loadContent();
-  }, [loadContent]);
+ 
 
   const save = async () => {
     if (!project) return;
@@ -37,10 +58,22 @@ export default function Project() {
       setMessage({ type: "error", text: "Ошибка сохранения" });
     }
     setSaving(false);
+    setSaveStatus(false)
   };
 
   useHotkeys("ctrl+s", save, { preventDefault: true }, [save]);
 
+
+   useEffect(() => {
+    readVariables();
+    loadContent();
+  }, [loadContent]);
+
+  useEffect(() => {
+    if (oldText !== text && !saveStatus) {
+        setSaveStatus(true)
+    }
+  }, [text])
   return (
     <section>
       <button className="btn btn-link p-0 mb-3" onClick={() => navigation(-1)}>
@@ -48,16 +81,18 @@ export default function Project() {
       </button>
 
       {message && (
-        <div className={`alert alert-${message.type === "error" ? "danger" : "success"} py-2`}>
+        <div
+          className={`alert alert-${message.type === "error" ? "danger" : "success"} py-2`}
+        >
           {message.text}
         </div>
       )}
 
       <section className="d-flex justify-content-between align-items-start">
         <div className="box sticky-top">
-          <h1>Редактор</h1>
+          <h1>Редактор {saveStatus ? "*" : ""}</h1>
           {loading ? (
-            <p>Загрузка...</p>
+            <Loader />
           ) : (
             <Editor
               height="calc(100vh - 120px)"
@@ -66,14 +101,18 @@ export default function Project() {
               onChange={(e) => setText(e as string)}
             />
           )}
-          <button className="btn btn-primary mt-2" onClick={save} disabled={saving || loading}>
+          <button
+            className="btn btn-primary mt-2"
+            onClick={save}
+            disabled={saving || loading}
+          >
             {saving ? "Сохранение..." : "Сохранить"}
           </button>
         </div>
         <div className="box">
           <h1>Результат</h1>
           <div
-            className="border rounded p-3 bg-light"
+            className="border rounded p-3 bg-light preview"
             style={{ minHeight: "200px" }}
             dangerouslySetInnerHTML={{ __html: text }}
           />

@@ -7,5 +7,6 @@ interface Window {
   Files: {
     getResource: (path: string, file_name?: string) => string;
     save: (path: string, new_content: string, file_name?: string) => boolean;
+    getResourceArray: (path: string, file_name?: string) => string[];
   };
 }

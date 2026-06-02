@@ -1,3 +1,17 @@
+@font-face {
+  font-family: "Times New Roman Italic";
+  src: url("../fonts/timesnewroman_italic.ttf");
+}
+
+@font-face {
+  font-family: "Times New Roman";
+  src: url("../fonts/timesnewromanpsmt.ttf");
+}
+
+h1, p {
+  font-family: "Times New Roman";
+}
+
 * {
   padding: 0;
   margin: 0;
