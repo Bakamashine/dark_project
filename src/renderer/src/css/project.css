@@ -1,12 +1,3 @@
-* {
-  padding: 0;
-  margin: 0;
-}
-
-body {
-  background-color: cyan;
-}
-
 .page {
   background-color: white;
 
@@ -14,19 +5,12 @@ body {
   margin-bottom: 20px;
   padding: 20px;
   width: 100%;
-  /* margin-left: auto; */
-  /* margin-right: auto; */
   box-shadow: 5px 5px 5px 5px;
   height: 1000px;
 }
 
-/* .page.first {
-  margin-top: 200px !important;
-} */
-
 .border {
     border: 1px solid black;
-    padding: 5px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -38,15 +22,12 @@ body {
 
 .stamp {
   width: 100%;
-  /* max-width: 690px; */
   height: 70px;
-  /* border: 1px solid black; */
   border-top: 1px solid black;
   display: flex;
   margin-top: auto;
 }
 
-/* Левая часть */
 .left {
   width: 270px;
   display: flex;
@@ -87,7 +68,6 @@ body {
   border-right: none;
 }
 
-/* Центральная часть */
 .center {
   flex: 1;
   border-left: 1px solid #888;
@@ -99,7 +79,6 @@ body {
   color: black;
 }
 
-/* Правая часть */
 .right {
   width: 48px;
   display: flex;
@@ -124,4 +103,6 @@ body {
     font-size: 20px;
 }
 
-
+.box {
+  width: 40%
+}
