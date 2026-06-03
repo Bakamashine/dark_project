@@ -1,8 +1,8 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, WebContentsView } from "electron";
 import { join } from "path";
 import fs from "fs";
 import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
+import path, { dirname } from "node:path";
 import { open } from "node:fs/promises";
 
 const isDev = !app.isPackaged;
@@ -15,11 +15,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const convertObjectToString = (scheme: object) => {
-  let temp_string: string = ""
+  let temp_string: string = "";
   for (const [key, value] of Object.entries(env_scheme)) {
-    temp_string += `${key}=${value}\n`
+    temp_string += `${key}=${value}\n`;
   }
-  return temp_string
+  return temp_string;
 };
 
 const getBasicPath = (path: string, file_name: string = "index.html") =>
@@ -57,7 +57,10 @@ ipcMain.handle("createProject", async (_, project_name: string) => {
     await fs.promises.mkdir(_path);
     await fs.promises.access(_path);
 
-    await fs.promises.writeFile(`${_path}/.env`, convertObjectToString(env_scheme));
+    await fs.promises.writeFile(
+      `${_path}/.env`,
+      convertObjectToString(env_scheme),
+    );
     return project_name;
   } catch (err) {
     console.log(err);
@@ -117,6 +120,62 @@ ipcMain.handle(
     }
   },
 );
+
+ipcMain.handle("saveToPdf", async (_, _path: string, htmlContent: string) => {
+  const pdfPath = getBasicPath(_path, "main.pdf");
+
+  const printWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    show: false,
+    webPreferences: { nodeIntegration: false, contextIsolation: true },
+  });
+
+  const styledHtml = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page { size: A4; margin: 20mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Times New Roman", Times, serif; font-size: 14pt; }
+    .page { page-break-after: always; width: 100%; }
+    .border { border: 1px solid #000; padding: 10px; min-height: 267mm; display: flex; flex-direction: column; }
+    .title-one { text-align: center; font-size: 18pt; margin: 20px 0; }
+    .stamp { margin-top: auto; height: 70px; border-top: 1px solid #000; display: flex; }
+    .left { width: 180px; border-right: 1px solid #000; display: flex; flex-direction: column; }
+    .left-top { display: grid; grid-template-columns: repeat(5, 1fr); }
+    .left-top div, .left-bottom div { border: 1px solid #000; text-align: center; font-size: 9pt; padding: 2px; }
+    .left-bottom { display: grid; grid-template-columns: repeat(5, 1fr); }
+    .left-bottom div { border-top: none; }
+    .center { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10pt; border-right: 1px solid #000; }
+    .right { width: 50px; display: flex; flex-direction: column; }
+    .right-top { border-bottom: 1px solid #000; text-align: center; font-size: 9pt; padding: 2px; }
+    .right-bottom { flex: 1; text-align: center; font-size: 10pt; padding: 2px; }
+  </style>
+</head>
+<body>${htmlContent}</body>
+</html>`;
+
+  await printWindow.loadURL(
+    `data:text/html;charset=utf-8,${encodeURIComponent(styledHtml)}`,
+  );
+
+  const options: Electron.PrintToPDFOptions = {
+    marginsType: 0,
+    pageSize: "A4",
+    printBackground: true,
+    printSelectionOnly: false,
+    landscape: false,
+  };
+
+  const data = await printWindow.webContents.printToPDF(options);
+  if (data) {
+    await fs.promises.writeFile(pdfPath, data, { flag: "w" });
+    console.log("PDF saved to", pdfPath);
+  }
+  printWindow.close();
+});
 
 app.whenReady().then(createWindow);
 

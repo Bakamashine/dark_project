@@ -15,9 +15,13 @@ contextBridge.exposeInMainWorld("Files", {
   getResource: (path: string, file_name: string = "index.html") =>
     ipcRenderer.invoke("getResource", path, file_name),
 
-  save: (path: string, new_content: string, file_name: string = 'index.html') => 
+  save: (path: string, new_content: string, file_name: string = "index.html") =>
     ipcRenderer.invoke("save", path, new_content, file_name),
 
-  getResourceArray: (path: string, file_name: string = 'index.html') => 
-    ipcRenderer.invoke("getResourceArray", path, file_name)
-})
+  getResourceArray: (path: string, file_name: string = "index.html") =>
+    ipcRenderer.invoke("getResourceArray", path, file_name),
+
+  saveToPdf: (path: string, htmlContent: string) => {
+    ipcRenderer.invoke("saveToPdf", path, htmlContent);
+  },
+});

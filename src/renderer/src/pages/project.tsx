@@ -40,9 +40,7 @@ export default function Project() {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
-    const content = doc.querySelectorAll(
-      ".page",
-    ) as NodeListOf<HTMLDivElement>;
+    const content = doc.querySelectorAll(".page") as NodeListOf<HTMLDivElement>;
     content.forEach((element, i) => {
       const page_number = element.querySelector(
         "#page_number",
@@ -126,6 +124,17 @@ export default function Project() {
     setSaveStatus(false);
     _setHtml(oldHtml);
   };
+
+  const parseEnv = async () => {
+    if (!project) return;
+    const pageNumber = await readVariables();
+    setStartPageNumber(pageNumber);
+    setPages(_html, pageNumber);
+  };
+
+  const saveToPdf = async () => {
+    if (project) await window.Files.saveToPdf(project, _html);
+  };
   useHotkeys("ctrl+s", save, { preventDefault: true }, [save]);
 
   useEffect(() => {
@@ -145,6 +154,7 @@ export default function Project() {
 
     return () => clearTimeout(timeout);
   }, [message]);
+
   return (
     <section>
       <button className="btn btn-link p-0 mb-3" onClick={() => navigation(-1)}>
@@ -175,6 +185,12 @@ export default function Project() {
             </button>
             <button className="btn btn-primary" onClick={dropSave}>
               Сбросить сохранение
+            </button>
+            <button className="btn btn-primary" onClick={parseEnv}>
+              Применить нумерацию из .env
+            </button>
+            <button className="btn btn-primary" onClick={saveToPdf}>
+              Сохранить в pdf
             </button>
           </div>
 
