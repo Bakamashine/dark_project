@@ -5,8 +5,8 @@ interface Window {
     getProjects: () => Promise<string[]>;
   };
   Files: {
-    getResource: (path: string, file_name?: string) => string;
-    save: (path: string, new_content: string, file_name?: string) => boolean;
-    getResourceArray: (path: string, file_name?: string) => string[];
+    getResource: (path: string, file_name?: string) => Promise<string>;
+    save: (path: string, new_content: string, file_name?: string) => Promise<boolean>;
+    getResourceArray: (path: string, file_name?: string) => Promise<string[]>;
   };
 }

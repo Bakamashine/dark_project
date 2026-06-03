@@ -6,10 +6,21 @@ import { dirname } from "node:path";
 import { open } from "node:fs/promises";
 
 const isDev = !app.isPackaged;
+const env_scheme = {
+  startPage: 1,
+};
 
 const project_dir = "projects";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const convertObjectToString = (scheme: object) => {
+  let temp_string: string = ""
+  for (const [key, value] of Object.entries(env_scheme)) {
+    temp_string += `${key}=${value}\n`
+  }
+  return temp_string
+};
 
 const getBasicPath = (path: string, file_name: string = "index.html") =>
   `${project_dir}/${path}/${file_name}`;
@@ -45,6 +56,8 @@ ipcMain.handle("createProject", async (_, project_name: string) => {
     const _path = `${project_dir}/${project_name}`;
     await fs.promises.mkdir(_path);
     await fs.promises.access(_path);
+
+    await fs.promises.writeFile(`${_path}/.env`, convertObjectToString(env_scheme));
     return project_name;
   } catch (err) {
     console.log(err);
@@ -94,10 +107,10 @@ ipcMain.handle(
       // return str_array.readLines()
       const temp_arr = [];
       for await (const line of str_array.readLines()) {
-        temp_arr.push(line)
+        temp_arr.push(line);
       }
 
-      return temp_arr
+      return temp_arr;
     } catch (e) {
       console.log(e);
       return null;
