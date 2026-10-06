@@ -33,6 +33,7 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: true,
       preload: join(__dirname, "../preload/index.mjs"),
+      devTools: true,
     },
   });
 
@@ -139,7 +140,7 @@ ipcMain.handle("saveToPdf", async (_, _path: string, htmlContent: string) => {
     @page { size: A4; margin: 20mm; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: "Times New Roman", Times, serif; font-size: 14pt; }
-    .page { page-break-after: always; width: 100%; }
+    .page { page-break-after: always; width: 100%;  }
     .border { border: 1px solid #000; padding: 10px; min-height: 267mm; display: flex; flex-direction: column; }
     .title-one { text-align: center; font-size: 18pt; margin: 20px 0; }
     .stamp { margin-top: auto; height: 70px; border-top: 1px solid #000; display: flex; }
@@ -152,6 +153,8 @@ ipcMain.handle("saveToPdf", async (_, _path: string, htmlContent: string) => {
     .right { width: 50px; display: flex; flex-direction: column; }
     .right-top { border-bottom: 1px solid #000; text-align: center; font-size: 9pt; padding: 2px; }
     .right-bottom { flex: 1; text-align: center; font-size: 10pt; padding: 2px; }
+    img {width: 200px; height: 200px;}
+    .img-one {width: 500px; height: 500px;}
   </style>
 </head>
 <body>${htmlContent}</body>
