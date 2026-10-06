@@ -33,7 +33,7 @@ export default function CreateProjectModal({
             onChange={(e) => onNameChange(e.target.value)}
             value={name}
           />
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="primary" className="mt-2">
             Save
           </Button>
         </Form.Group>
