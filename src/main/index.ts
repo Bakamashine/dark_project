@@ -137,12 +137,12 @@ ipcMain.handle("saveToPdf", async (_, _path: string, htmlContent: string) => {
 <head>
   <meta charset="UTF-8">
   <style>
-    @page { size: A4; margin: 20mm; }
+    @page { size: A4; margin: 5mm 5mm 5mm 20mm; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: "Times New Roman", Times, serif; font-size: 14pt; }
     .page { page-break-after: always; width: 100%; }
     .page:last-child { page-break-after: auto; }
-    .border { border: 1px solid #000; padding: 10px; min-height: 257mm; display: flex; flex-direction: column; }
+    .border { border: 1px solid #000; padding: 10px; min-height: 287mm; display: flex; flex-direction: column; }
     .title-one { text-align: center; font-size: 18pt; font-weight: bold; margin: 20px 0; }
     .stamp { margin: auto -10px -10px; height: 70px; border-top: 1px solid #000; display: flex; }
     .left { width: 270px; flex-shrink: 0; display: flex; flex-direction: column; }
