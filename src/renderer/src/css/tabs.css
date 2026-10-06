@@ -1,19 +1,18 @@
 .tab-strip {
   display: flex;
-  align-items: stretch;
-  height: 36px;
+  align-items: flex-start;
+  min-height: 36px;
   background-color: #252526;
   border-bottom: 1px solid #1a1a1a;
 }
 
 .tab-strip__list {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 2px;
   align-items: stretch;
   flex: 1;
   min-width: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: thin;
 }
 
 .app-tab {
@@ -23,6 +22,7 @@
   gap: 8px;
   min-width: 160px;
   max-width: 240px;
+  min-height: 36px;
   padding: 0 4px 0 12px;
   border: none;
   border-right: 1px solid #252526;
@@ -100,12 +100,14 @@
 
 .app-tab:focus-visible,
 .tab-add:focus-visible,
+.tab-close-all:focus-visible,
 .app-tab__close:focus-visible {
   outline: 2px solid #0078d4;
   outline-offset: -2px;
 }
 
-.tab-add {
+.tab-add,
+.tab-close-all {
   width: 28px;
   height: 36px;
   flex-shrink: 0;
@@ -120,7 +122,13 @@
   transition: background-color 0.1s ease, color 0.1s ease;
 }
 
-.tab-add:hover {
+.tab-close-all svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tab-add:hover,
+.tab-close-all:hover {
   background-color: #323233;
   color: #ffffff;
 }

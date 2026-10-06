@@ -66,3 +66,22 @@ export function SearchIcon() {
     </svg>
   );
 }
+
+export function CloseAllIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 4.5 11.5 11" />
+      <path d="M11.5 4.5 5 11" />
+      <path d="M12.5 12.5 19 19" />
+      <path d="M19 12.5 12.5 19" />
+    </svg>
+  );
+}

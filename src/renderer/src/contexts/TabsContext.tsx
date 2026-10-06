@@ -11,6 +11,7 @@ interface TabsContextValue {
   tabs: string[];
   openTab: (name: string) => void;
   closeTab: (name: string) => void;
+  closeAllTabs: () => void;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -26,9 +27,13 @@ export function TabsProvider({ children }: { children: ReactNode }) {
     setTabs((prev) => prev.filter((t) => t !== name));
   }, []);
 
+  const closeAllTabs = useCallback(() => {
+    setTabs([]);
+  }, []);
+
   const value = useMemo(
-    () => ({ tabs, openTab, closeTab }),
-    [tabs, openTab, closeTab],
+    () => ({ tabs, openTab, closeTab, closeAllTabs }),
+    [tabs, openTab, closeTab, closeAllTabs],
   );
 
   return <TabsContext.Provider value={value}>{children}</TabsContext.Provider>;

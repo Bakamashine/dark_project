@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useTabs } from "@renderer/contexts/TabsContext";
-import { FolderIcon } from "./Icons";
+import { CloseAllIcon, FolderIcon } from "./Icons";
 import "../css/tabs.css";
 
 interface TabStripProps {
@@ -8,7 +8,7 @@ interface TabStripProps {
 }
 
 export default function TabStrip({ showNewTab = true }: TabStripProps) {
-  const { tabs, closeTab } = useTabs();
+  const { tabs, closeTab, closeAllTabs } = useTabs();
   const { project } = useParams<{ project: string }>();
   const navigate = useNavigate();
 
@@ -22,6 +22,11 @@ export default function TabStrip({ showNewTab = true }: TabStripProps) {
       const next = remaining[Math.min(index, remaining.length - 1)];
       navigate(next ? `/project/${next}` : "/");
     }
+  };
+
+  const handleCloseAll = () => {
+    closeAllTabs();
+    navigate("/");
   };
 
   return (
@@ -65,6 +70,15 @@ export default function TabStrip({ showNewTab = true }: TabStripProps) {
           +
         </button>
       )}
+
+      <button
+        className="tab-close-all"
+        title="Close all tabs"
+        aria-label="Close all tabs"
+        onClick={handleCloseAll}
+      >
+        <CloseAllIcon />
+      </button>
     </div>
   );
 }
