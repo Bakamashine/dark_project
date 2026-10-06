@@ -4,6 +4,9 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { useNavigate, useParams } from "react-router-dom";
 import "../css/project.css";
 import Loader from "@renderer/components/Loader";
+import PaneHeader from "@renderer/components/PaneHeader";
+import EditorToolbar from "@renderer/components/EditorToolbar";
+import PreviewPane from "@renderer/components/PreviewPane";
 
 export default function Project() {
   const [_html, _setHtml] = useState("");
@@ -17,6 +20,7 @@ export default function Project() {
   const { project } = useParams<{ project: string }>();
   const [startPageNumber, setStartPageNumber] = useState(1);
   const [saveStatus, setSaveStatus] = useState(false);
+  const [showPreview, setShowPreview] = useState(true);
   const navigation = useNavigate();
 
   const readVariables = useCallback(async (): Promise<number> => {
@@ -75,9 +79,9 @@ export default function Project() {
     const ok = await window.Files.save(project, _html);
     if (ok) {
       setOldHtml(_html);
-      setMessage({ type: "success", text: "Файл сохранён" });
+      setMessage({ type: "success", text: "File saved" });
     } else {
-      setMessage({ type: "error", text: "Ошибка сохранения" });
+      setMessage({ type: "error", text: "Save failed" });
     }
     setSaving(false);
     setSaveStatus(false);
@@ -157,8 +161,8 @@ export default function Project() {
 
   return (
     <section>
-      <button className="back-link" onClick={() => navigation(-1)}>
-        ← Назад
+      <button className="back-link" onClick={() => navigation('/')}>
+        &larr; Back
       </button>
 
       {message && (
@@ -170,48 +174,45 @@ export default function Project() {
       )}
 
       <section className="d-flex justify-content-between align-items-start">
-        <div className="box editor-pane sticky-top">
-          <h1>Редактор {saveStatus ? "*" : ""}</h1>
-          <div className="editor-toolbar">
-            <button
-              className="btn btn-primary"
-              onClick={save}
-              disabled={saving || loading}
-            >
-              {saving ? "Сохранение..." : "Сохранить"}
-            </button>
-            <button className="btn btn-primary" onClick={addPage}>
-              Добавить страницу
-            </button>
-            <button className="btn btn-primary" onClick={dropSave}>
-              Сбросить сохранение
-            </button>
-            <button className="btn btn-primary" onClick={parseEnv}>
-              Применить нумерацию из .env
-            </button>
-            <button className="btn btn-primary" onClick={saveToPdf}>
-              Сохранить в pdf
-            </button>
-          </div>
+        <div
+          className={`box editor-pane sticky-top${showPreview ? "" : " box--full"}`}
+        >
+          <PaneHeader title={`Editor${saveStatus ? " *" : ""}`}>
+            {!showPreview && (
+              <button
+                className="btn btn-outline-secondary"
+                onClick={() => setShowPreview(true)}
+              >
+                Show preview
+              </button>
+            )}
+          </PaneHeader>
+
+          <EditorToolbar
+            saving={saving}
+            loading={loading}
+            onSave={save}
+            onAddPage={addPage}
+            onRevert={dropSave}
+            onApplyNumbering={parseEnv}
+            onExportPdf={saveToPdf}
+          />
 
           {loading ? (
             <Loader />
           ) : (
             <Editor
-              height="calc(100vh - 120px)"
+              height="calc(100vh - 156px)"
               defaultLanguage="html"
               value={_html}
               onChange={(e) => _setHtml(e as string)}
             />
           )}
         </div>
-        <div className="box">
-          <h1>Результат</h1>
-          <div
-            className="preview"
-            dangerouslySetInnerHTML={{ __html: _html }}
-          />
-        </div>
+
+        {showPreview && (
+          <PreviewPane html={_html} onClose={() => setShowPreview(false)} />
+        )}
       </section>
     </section>
   );

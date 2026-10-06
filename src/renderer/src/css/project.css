@@ -3,10 +3,46 @@
   min-width: 0;
 }
 
+.box--full {
+  width: 100%;
+}
+
 .box h1 {
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
+}
+
+.pane-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.pane-head h1 {
+  margin-bottom: 0;
+}
+
+.pane-close {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--ms-radius);
+  background: none;
+  color: var(--ms-text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.pane-close:hover {
+  background-color: var(--ms-bg-hover);
+  color: var(--ms-text);
 }
 
 .box.sticky-top {

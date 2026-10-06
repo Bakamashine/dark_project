@@ -146,6 +146,20 @@ a:hover {
   color: #fff;
 }
 
+.btn-outline-secondary {
+  background-color: #fff;
+  border-color: var(--ms-border-strong);
+  color: var(--ms-text-secondary);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active {
+  background-color: var(--ms-bg-hover);
+  border-color: #605e5c;
+  color: var(--ms-text);
+}
+
 .btn-link {
   color: var(--ms-link);
   font-weight: 600;

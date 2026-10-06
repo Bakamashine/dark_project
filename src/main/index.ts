@@ -29,6 +29,7 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: true,
@@ -168,8 +169,12 @@ ipcMain.handle("saveToPdf", async (_, _path: string, htmlContent: string) => {
   );
 
   const options: Electron.PrintToPDFOptions = {
-    marginsType: 0,
-    // margins: 
+    margins: {
+      top: 0.19685,
+      bottom: 0.19685,
+      right: 0.19685,
+      left: 0.7874,
+    },
     pageSize: "A4",
     printBackground: true,
     printSelectionOnly: false,

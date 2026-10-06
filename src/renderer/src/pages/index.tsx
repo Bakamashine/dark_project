@@ -1,27 +1,30 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  ListGroup,
-  Spinner,
-  Form,
-  Alert,
-  Button,
-} from "react-bootstrap";
-import ModalWindow from "@renderer/components/ModalWindow";
+import { Alert, Button, Container, Col, Row } from "react-bootstrap";
+import AppHeader from "@renderer/components/AppHeader";
+import ActivityBar from "@renderer/components/ActivityBar";
+import ProjectCard from "@renderer/components/ProjectCard";
+import ProjectSearch from "@renderer/components/ProjectSearch";
+import ProjectsPagination from "@renderer/components/ProjectsPagination";
+import CreateProjectModal from "@renderer/components/CreateProjectModal";
+import AboutModal from "@renderer/components/AboutModal";
+import TabStrip from "@renderer/components/TabStrip";
+import Loader from "@renderer/components/Loader";
 import { timeout_alert } from "@renderer/constants/timeout";
+import "../css/home.css";
+
+const ITEMS_PER_PAGE = 8;
 
 function MainPage() {
   const [projects, setProjects] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [projectName, setProjectName] = useState("");
   const [show, setShow] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
   const [badAlert, setBadAlert] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [query, setQuery] = useState("");
 
   const loadProjects = async () => {
     try {
@@ -32,6 +35,11 @@ function MainPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const refresh = () => {
+    setLoading(true);
+    loadProjects();
   };
 
   const handleCreateProject = async (e: FormEvent<HTMLFormElement>) => {
@@ -64,76 +72,109 @@ function MainPage() {
     return () => clearTimeout(timer);
   }, [successAlert, badAlert]);
 
+  const trimmedQuery = query.trim().toLowerCase();
+  const filteredProjects = trimmedQuery
+    ? projects.filter((name) => name.toLowerCase().includes(trimmedQuery))
+    : projects;
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredProjects.length / ITEMS_PER_PAGE),
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query]);
+
+  useEffect(() => {
+    setCurrentPage((p) => Math.min(p, totalPages));
+  }, [totalPages]);
+
+  const visibleProjects = filteredProjects.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
+
   return (
     <>
-      <Alert variant="success" show={successAlert}>
-        Проект был успешно создан! Имя нового проекта: {newProjectName}
-      </Alert>
-      <Alert variant="danger" show={badAlert}>
-        Проект существует, либо поле было пустое, либо произошла ошибка
-      </Alert>
-      <ModalWindow
+      <AppHeader onRefresh={refresh} onCreate={() => setShow(true)} />
+      <TabStrip showNewTab={false} />
+
+      <div className="app-shell">
+        <ActivityBar
+          onCreate={() => setShow(true)}
+          onAbout={() => setShowAbout(true)}
+        />
+
+        <main className="app-content">
+          <Container fluid className="px-4 py-4">
+            <Alert variant="success" show={successAlert}>
+              Project created successfully! New project name: {newProjectName}
+            </Alert>
+            <Alert variant="danger" show={badAlert}>
+              The project already exists, the field was empty, or an error
+              occurred
+            </Alert>
+
+            <div className="content-head">
+              <div>
+                <h1>Projects</h1>
+                <p className="text-muted mb-0">Your documents</p>
+              </div>
+              <div className="content-head__actions">
+                <ProjectSearch value={query} onChange={setQuery} />
+                <span className="project-count text-muted">
+                  {trimmedQuery
+                    ? `${filteredProjects.length} of ${projects.length}`
+                    : `${projects.length} total`}
+                </span>
+              </div>
+            </div>
+
+            {loading ? (
+              <Loader height="300px" />
+            ) : projects.length > 0 ? (
+              filteredProjects.length > 0 ? (
+                <>
+                  <Row xs={1} sm={2} md={3} lg={4} className="g-3">
+                    {visibleProjects.map((item) => (
+                      <Col key={item}>
+                        <ProjectCard name={item} />
+                      </Col>
+                    ))}
+                  </Row>
+
+                  <ProjectsPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onChange={setCurrentPage}
+                  />
+                </>
+              ) : (
+                <div className="empty-state">
+                  <p className="mb-0">No projects found</p>
+                </div>
+              )
+            ) : (
+              <div className="empty-state">
+                <p className="mb-3">No projects yet</p>
+                <Button variant="primary" onClick={() => setShow(true)}>
+                  Create your first project
+                </Button>
+              </div>
+            )}
+          </Container>
+        </main>
+      </div>
+
+      <CreateProjectModal
         show={show}
         onClose={() => setShow(false)}
-        hideSubmitButton={true}
-      >
-        <Form onSubmit={handleCreateProject}>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Ваше название проекта</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Название проекта..."
-              onChange={(e) => setProjectName(e.target.value)}
-              value={projectName}
-            />
-            <Button type="submit" variant="primary">
-              Сохранить
-            </Button>
-          </Form.Group>
-        </Form>
-      </ModalWindow>
-      <Container className="py-5">
-        <Row className="justify-content-center">
-          <Col md={8} lg={6}>
-            <Card className="shadow-sm">
-              <Card.Body>
-                <Card.Title as="h1" className="mb-3">
-                  Здравствуйте!
-                </Card.Title>
-                <Card.Subtitle className="mb-4 text-muted">
-                  Ваши проекты |{" "}
-                  <Link to={""} onClick={() => setShow(true)}>
-                    Создать
-                  </Link>
-                </Card.Subtitle>
-
-                {loading ? (
-                  <div className="text-center py-3">
-                    <Spinner animation="border" variant="primary" />
-                  </div>
-                ) : projects.length > 0 ? (
-                  <ListGroup variant="flush">
-                    {projects.map((item, i) => (
-                      <ListGroup.Item
-                        key={i}
-                        action
-                        as={Link}
-                        to={`/project/${item}`}
-                        className="d-flex justify-content-between align-items-center"
-                      >
-                        {item}
-                        <span className="text-muted">&rarr;</span>
-                      </ListGroup.Item>
-                    ))}
-                  </ListGroup>
-                ) : (
-                  <p className="text-muted mb-0 text-center">Проектов нет</p>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+        name={projectName}
+        onNameChange={setProjectName}
+        onSubmit={handleCreateProject}
+      />
+      <AboutModal show={showAbout} onClose={() => setShowAbout(false)} />
     </>
   );
 }

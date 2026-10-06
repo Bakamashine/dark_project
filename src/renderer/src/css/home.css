@@ -1,0 +1,296 @@
+:root {
+  --app-header-h: 48px;
+  --ms-activity-bg: #333333;
+  --ms-activity-hover: #4a4a4a;
+}
+
+/* Header */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--app-header-h);
+  padding: 0 16px;
+  background-color: #fff;
+  border-bottom: 1px solid var(--ms-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ms-text);
+  text-decoration: none;
+}
+
+.app-brand:hover {
+  color: var(--ms-text);
+  text-decoration: none;
+}
+
+.brand-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--ms-radius);
+  background-color: var(--ms-brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.app-header__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Shell + VSCode-like activity bar */
+.app-shell {
+  display: flex;
+  align-items: flex-start;
+  min-height: calc(100vh - var(--app-header-h));
+}
+
+.activity-bar {
+  position: sticky;
+  top: var(--app-header-h);
+  flex-shrink: 0;
+  width: 56px;
+  height: calc(100vh - var(--app-header-h));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding-top: 4px;
+  background-color: var(--ms-activity-bg);
+}
+
+.activity-item {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  color: #858585;
+  cursor: pointer;
+  transition: color 0.1s ease, background-color 0.1s ease;
+}
+
+.activity-item:hover {
+  color: #fff;
+  background-color: var(--ms-activity-hover);
+}
+
+.activity-item.active {
+  color: #fff;
+  background-color: #2d2d2d;
+  border-left-color: var(--ms-brand);
+}
+
+.activity-item:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+
+.activity-item svg {
+  width: 24px;
+  height: 24px;
+}
+
+.activity-item--bottom {
+  margin-top: auto;
+  margin-bottom: 8px;
+}
+
+.activity-tip {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 8px;
+  background-color: #252526;
+  border: 1px solid #454545;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease;
+  z-index: 1100;
+}
+
+.activity-item:hover .activity-tip {
+  opacity: 1;
+}
+
+/* Content */
+.app-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.content-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.content-head h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.125rem;
+}
+
+.project-count {
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.content-head__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.project-search {
+  position: relative;
+  width: 240px;
+}
+
+.project-search__icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  color: var(--ms-text-secondary);
+  pointer-events: none;
+}
+
+.project-search__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.project-search .form-control {
+  padding-left: 32px;
+}
+
+/* Project cards */
+.project-card {
+  color: var(--ms-text);
+  text-decoration: none;
+  background-color: var(--ms-bg-card);
+  border: 1px solid var(--ms-border);
+  border-radius: var(--ms-radius);
+  box-shadow: var(--ms-shadow-4);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.project-card:hover {
+  color: var(--ms-text);
+  text-decoration: none;
+  border-color: var(--ms-brand);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.14);
+  transform: translateY(-2px);
+}
+
+.project-card:focus-visible {
+  outline: 2px solid var(--ms-text);
+  outline-offset: 1px;
+}
+
+.project-card .card-body {
+  padding: 16px;
+}
+
+.project-card__icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 12px;
+  border-radius: var(--ms-radius);
+  background-color: #eaf4fd;
+  color: var(--ms-brand);
+}
+
+.project-card__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.project-card__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ms-text);
+  margin-bottom: 4px;
+  overflow-wrap: anywhere;
+}
+
+.project-card__meta {
+  font-size: 0.75rem;
+  color: var(--ms-text-secondary);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  background-color: #fff;
+  border: 1px dashed var(--ms-border-strong);
+  border-radius: var(--ms-radius);
+  color: var(--ms-text-secondary);
+}
+
+/* Pagination */
+.pagination-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.pagination .page-link {
+  color: var(--ms-brand);
+  border: none;
+  border-radius: var(--ms-radius);
+  margin: 0 2px;
+  font-size: 0.875rem;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--ms-brand);
+  color: #fff;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: var(--ms-text-disabled);
+  background-color: transparent;
+}
+
+.pagination .page-link:hover {
+  background-color: var(--ms-bg-hover);
+  color: var(--ms-brand-hover);
+}
+
+.pagination .page-item.active .page-link:hover {
+  background-color: var(--ms-brand-hover);
+  color: #fff;
+}

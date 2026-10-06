@@ -4,6 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "types": ["electron-vite/node"]
   },
   "include": [
