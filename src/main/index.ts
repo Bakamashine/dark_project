@@ -140,19 +140,22 @@ ipcMain.handle("saveToPdf", async (_, _path: string, htmlContent: string) => {
     @page { size: A4; margin: 20mm; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: "Times New Roman", Times, serif; font-size: 14pt; }
-    .page { page-break-after: always; width: 100%;  }
-    .border { border: 1px solid #000; padding: 10px; min-height: 267mm; display: flex; flex-direction: column; }
-    .title-one { text-align: center; font-size: 18pt; margin: 20px 0; }
-    .stamp { margin-top: auto; height: 70px; border-top: 1px solid #000; display: flex; }
-    .left { width: 180px; border-right: 1px solid #000; display: flex; flex-direction: column; }
-    .left-top { display: grid; grid-template-columns: repeat(5, 1fr); }
-    .left-top div, .left-bottom div { border: 1px solid #000; text-align: center; font-size: 9pt; padding: 2px; }
-    .left-bottom { display: grid; grid-template-columns: repeat(5, 1fr); }
-    .left-bottom div { border-top: none; }
-    .center { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10pt; border-right: 1px solid #000; }
-    .right { width: 50px; display: flex; flex-direction: column; }
-    .right-top { border-bottom: 1px solid #000; text-align: center; font-size: 9pt; padding: 2px; }
-    .right-bottom { flex: 1; text-align: center; font-size: 10pt; padding: 2px; }
+    .page { page-break-after: always; width: 100%; }
+    .page:last-child { page-break-after: auto; }
+    .border { border: 1px solid #000; padding: 10px; min-height: 257mm; display: flex; flex-direction: column; }
+    .title-one { text-align: center; font-size: 18pt; font-weight: bold; margin: 20px 0; }
+    .stamp { margin: auto -10px -10px; height: 70px; border-top: 1px solid #000; display: flex; }
+    .left { width: 270px; flex-shrink: 0; display: flex; flex-direction: column; }
+    .left-top { height: 40px; border-bottom: 1px solid #000; display: grid; grid-template-columns: 40px 45px 90px 50px 45px; }
+    .left-top div { border-right: 1px solid #000; }
+    .left-top div:last-child { border-right: none; }
+    .left-bottom { flex: 1; display: grid; grid-template-columns: 40px 45px 90px 50px 45px; }
+    .left-bottom div { border-right: 1px solid #000; display: flex; align-items: center; justify-content: center; font-size: 9pt; text-align: center; }
+    .left-bottom div:last-child { border-right: none; }
+    .center { flex: 1; border-left: 1px solid #000; border-right: 1px solid #000; display: flex; align-items: center; justify-content: center; font-size: 10pt; }
+    .right { width: 48px; flex-shrink: 0; display: flex; flex-direction: column; }
+    .right-top { height: 22px; border-bottom: 1px solid #000; display: flex; align-items: center; justify-content: center; font-size: 9pt; }
+    .right-bottom { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10pt; }
     img {width: 200px; height: 200px;}
     .img-one {width: 500px; height: 500px;}
   </style>
@@ -166,6 +169,7 @@ ipcMain.handle("saveToPdf", async (_, _path: string, htmlContent: string) => {
 
   const options: Electron.PrintToPDFOptions = {
     marginsType: 0,
+    // margins: 
     pageSize: "A4",
     printBackground: true,
     printSelectionOnly: false,

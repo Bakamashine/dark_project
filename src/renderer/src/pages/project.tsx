@@ -157,22 +157,22 @@ export default function Project() {
 
   return (
     <section>
-      <button className="btn btn-link p-0 mb-3" onClick={() => navigation(-1)}>
+      <button className="back-link" onClick={() => navigation(-1)}>
         ← Назад
       </button>
 
       {message && (
         <div
-          className={`alert alert-${message.type === "error" ? "danger" : "success"} py-2`}
+          className={`alert message-bar alert-${message.type === "error" ? "danger" : "success"} py-2`}
         >
           {message.text}
         </div>
       )}
 
       <section className="d-flex justify-content-between align-items-start">
-        <div className="box sticky-top">
+        <div className="box editor-pane sticky-top">
           <h1>Редактор {saveStatus ? "*" : ""}</h1>
-          <div className="">
+          <div className="editor-toolbar">
             <button
               className="btn btn-primary"
               onClick={save}
@@ -208,8 +208,7 @@ export default function Project() {
         <div className="box">
           <h1>Результат</h1>
           <div
-            className="border rounded p-3 bg-light preview"
-            style={{ minHeight: "200px" }}
+            className="preview"
             dangerouslySetInnerHTML={{ __html: _html }}
           />
         </div>
