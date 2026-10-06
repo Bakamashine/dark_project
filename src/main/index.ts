@@ -177,7 +177,6 @@ ipcMain.handle("saveToPdf", async (_, _path: string, htmlContent: string) => {
     },
     pageSize: "A4",
     printBackground: true,
-    printSelectionOnly: false,
     landscape: false,
   };
 
