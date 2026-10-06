@@ -1,3 +1,5 @@
+import CssClassesTip from "./CssClassesTip";
+
 interface EditorToolbarProps {
   saving: boolean;
   loading: boolean;
@@ -38,6 +40,7 @@ export default function EditorToolbar({
       <button className="btn btn-primary" onClick={onExportPdf}>
         Export to PDF
       </button>
+      <CssClassesTip />
     </div>
   );
 }

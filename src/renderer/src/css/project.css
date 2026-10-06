@@ -238,3 +238,38 @@ img {
   width: 500px;
   height: 500px;
 }
+
+/* CSS classes tip popover */
+.popover {
+  font-family: var(--ms-font);
+  font-size: 0.8125rem;
+  border-radius: var(--ms-radius);
+}
+
+.css-classes-tip {
+  max-width: 380px;
+}
+
+.css-classes-tip__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.css-classes-tip__list code {
+  padding: 1px 5px;
+  border-radius: 3px;
+  background-color: var(--ms-bg-hover);
+  color: var(--ms-text);
+}
+
+html[data-theme="dark"] .popover {
+  --bs-popover-bg: #292827;
+  --bs-popover-border-color: #3b3a39;
+  --bs-popover-header-bg: #333333;
+  --bs-popover-header-color: #f3f2f1;
+  --bs-popover-body-color: #f3f2f1;
+  --bs-popover-arrow-color: #292827;
+}

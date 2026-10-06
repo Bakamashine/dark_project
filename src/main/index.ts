@@ -44,6 +44,17 @@ function createWindow() {
     win.loadFile(join(__dirname, "../renderer/index.html"));
   }
 
+  win.webContents.on("before-input-event", (_event, input) => {
+    if (
+      input.type === "keyDown" &&
+      (input.control || input.meta) &&
+      !input.alt &&
+      input.key.toLowerCase() === "r"
+    ) {
+      _event.preventDefault();
+    }
+  });
+
   fs.mkdirSync(project_dir, { recursive: true });
 }
 

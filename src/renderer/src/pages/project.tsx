@@ -7,6 +7,7 @@ import Loader from "@renderer/components/Loader";
 import PaneHeader from "@renderer/components/PaneHeader";
 import EditorToolbar from "@renderer/components/EditorToolbar";
 import PreviewPane from "@renderer/components/PreviewPane";
+import { useTheme } from "@renderer/contexts/ThemeContext";
 
 export default function Project() {
   const [_html, _setHtml] = useState("");
@@ -22,6 +23,7 @@ export default function Project() {
   const [saveStatus, setSaveStatus] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const navigation = useNavigate();
+  const { theme } = useTheme();
 
   const readVariables = useCallback(async (): Promise<number> => {
     if (project) {
@@ -204,6 +206,7 @@ export default function Project() {
             <Editor
               height="calc(100vh - 156px)"
               defaultLanguage="html"
+              theme={theme === "dark" ? "vs-dark" : "light"}
               value={_html}
               onChange={(e) => _setHtml(e as string)}
             />

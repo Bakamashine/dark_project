@@ -30,6 +30,24 @@ html {
   color-scheme: light;
 }
 
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --ms-text: #f3f2f1;
+  --ms-text-secondary: #c8c6c4;
+  --ms-text-disabled: #605e5c;
+  --ms-link: #75b6e7;
+  --ms-border: #3b3a39;
+  --ms-border-strong: #605e5c;
+  --ms-bg-page: #1b1a19;
+  --ms-bg-card: #292827;
+  --ms-bg-hover: #333333;
+  --ms-bg-pressed: #3d3d3d;
+  --ms-shadow-4: 0 1.6px 3.6px rgba(0, 0, 0, 0.4),
+    0 0.3px 0.9px rgba(0, 0, 0, 0.3);
+  --ms-shadow-8: 0 3.2px 7.2px rgba(0, 0, 0, 0.4),
+    0 0.6px 1.8px rgba(0, 0, 0, 0.3);
+}
+
 body {
   font-family: var(--ms-font);
   font-size: 14px;
@@ -67,6 +85,10 @@ a:hover {
   text-decoration: underline;
 }
 
+html[data-theme="dark"] a:hover {
+  color: #4db2ff;
+}
+
 :focus-visible {
   outline: 2px solid var(--ms-text);
   outline-offset: 1px;
@@ -92,6 +114,19 @@ a:hover {
 }
 
 ::-webkit-scrollbar-thumb:hover {
+  background: #8a8886;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--ms-bg-page);
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #605e5c;
+  border-color: var(--ms-bg-page);
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
   background: #8a8886;
 }
 
@@ -147,7 +182,7 @@ a:hover {
 }
 
 .btn-outline-secondary {
-  background-color: #fff;
+  background-color: var(--ms-bg-card);
   border-color: var(--ms-border-strong);
   color: var(--ms-text-secondary);
 }
@@ -230,7 +265,7 @@ h1.card-title {
   font-family: var(--ms-font);
   font-size: 0.875rem;
   color: var(--ms-text);
-  background-color: #fff;
+  background-color: var(--ms-bg-card);
   border: 1px solid var(--ms-border-strong);
   border-radius: var(--ms-radius);
   padding: 0.375rem 0.625rem;
@@ -245,7 +280,7 @@ h1.card-title {
 }
 
 .form-control:focus {
-  background-color: #fff;
+  background-color: var(--ms-bg-card);
   border-color: var(--ms-brand);
   box-shadow: inset 0 0 0 1px var(--ms-brand);
   color: var(--ms-text);
@@ -282,6 +317,28 @@ h1.card-title {
 .alert-dismissible .btn-close {
   filter: none;
   opacity: 0.6;
+}
+
+html[data-theme="dark"] .alert-success {
+  background-color: #393d1b;
+  border-color: #4c6125;
+  color: #92c353;
+}
+
+html[data-theme="dark"] .alert-danger {
+  background-color: #442726;
+  border-color: #753029;
+  color: #f1707b;
+}
+
+html[data-theme="dark"] .alert-info {
+  background-color: #1f2733;
+  border-color: #2c4a67;
+  color: #82c7ff;
+}
+
+html[data-theme="dark"] .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
 }
 
 /* Modal */

@@ -14,9 +14,26 @@
   justify-content: space-between;
   height: var(--app-header-h);
   padding: 0 16px;
-  background-color: #fff;
+  background-color: var(--ms-bg-card);
   border-bottom: 1px solid var(--ms-border);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-header__actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-header__actions .btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .app-brand {
@@ -254,7 +271,7 @@
 .empty-state {
   text-align: center;
   padding: 48px 24px;
-  background-color: #fff;
+  background-color: var(--ms-bg-card);
   border: 1px dashed var(--ms-border-strong);
   border-radius: var(--ms-radius);
   color: var(--ms-text-secondary);
@@ -269,10 +286,12 @@
 
 .pagination .page-link {
   color: var(--ms-brand);
+  background-color: transparent;
   border: none;
   border-radius: var(--ms-radius);
   margin: 0 2px;
   font-size: 0.875rem;
+  box-shadow: none;
 }
 
 .pagination .page-item.active .page-link {
